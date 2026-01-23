@@ -1,4 +1,4 @@
-import Cookies from 'js-cookie'
+import Cookies from '../../node_modules/@types/js-cookie'
 import { GAMEMODE_CHUNITHM, DEFAULT_LAYOUT } from './constants'
 
 // 設定の型定義
