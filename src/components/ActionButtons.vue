@@ -27,12 +27,6 @@
       </span>
       <span v-else>表示</span>
     </button>
-    <button
-      class="px-10 py-5 font-bold text-xl rounded-2xl transition-all duration-300 border-0 cursor-pointer bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-700 hover:to-red-600 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/40 w-full sm:w-auto"
-      @click="$emit('deleteResult')"
-    >
-      削除
-    </button>
   </div>
 </template>
 
@@ -43,7 +37,6 @@ defineProps<{
 
 defineEmits<{
   processCorrection: []
-  deleteResult: []
 }>()
 </script>
 

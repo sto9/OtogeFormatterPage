@@ -43,19 +43,46 @@ export function processInputText(inputText: string): {
 // API結果を元の形式に復元
 export function restoreResultsFormat(
   originalSentences: string[],
-  apiResults: string[]
-): string[] {
+  apiData: { results: string[]; types?: string[] }
+): { results: string[]; types: string[] } {
   const allResults: string[] = []
+  const allTypes: string[] = []
   let resultIndex = 0
 
-  for (const sentence of originalSentences) {
+  // typesが存在しない場合、結果を比較して自動判定
+  const generateTypes = !apiData.types
+  const spaceRegex = /[ 　［］\[\]()（）【】]/gu
+
+  for (let i = 0; i < originalSentences.length; i++) {
+    const sentence = originalSentences[i]
     if (sentence.trim() !== '') {
-      allResults.push(apiResults[resultIndex] || '')
+      const result = apiData.results[resultIndex] || ''
+      allResults.push(result)
+
+      if (generateTypes) {
+        // typesがない場合は結果を比較して判定
+        if (!result) {
+          allTypes.push('red')
+        } else if (sentence === result) {
+          allTypes.push('normal')
+        } else {
+          const sentenceNoSpace = sentence.replace(spaceRegex, '')
+          const resultNoSpace = result.replace(spaceRegex, '')
+          if (sentenceNoSpace === resultNoSpace) {
+            allTypes.push('normal')
+          } else {
+            allTypes.push('bold')
+          }
+        }
+      } else {
+        allTypes.push(apiData.types![resultIndex] || 'normal')
+      }
       resultIndex++
     } else {
       allResults.push('')
+      allTypes.push('normal')
     }
   }
 
-  return allResults
+  return { results: allResults, types: allTypes }
 }

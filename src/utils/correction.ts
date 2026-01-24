@@ -7,6 +7,7 @@ export interface CorrectionResult {
   success: boolean
   originalText: string
   correctedText: string
+  types?: string[]
   errorMessage?: string
 }
 
@@ -29,12 +30,13 @@ export async function processCorrection(
     const gameType = gameModeToString(gamemode)
 
     const apiResults = await formatterApi.fixSongs(gameType, selectedFormat, nonEmptyLines)
-    const allResults = restoreResultsFormat(sentences, apiResults)
+    const { results: allResults, types: allTypes } = restoreResultsFormat(sentences, apiResults)
 
     return {
       success: true,
       originalText: inputText,
       correctedText: allResults.join('\n'),
+      types: allTypes,
     }
   } catch (error) {
     console.error('Error during correction:', error)

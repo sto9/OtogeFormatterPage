@@ -7,11 +7,10 @@ import {
   DEFAULT_FORMAT_OPTIONS,
   DEFAULT_FORMAT,
   DEFAULT_LAYOUT,
-  DEFAULT_PLACEHOLDER_TEXT
+  getPlaceholderForFormat
 } from './utils/constants'
 import { updateFormatLabels } from './utils/gameMode'
 import { saveSettings, loadSettings } from './utils/settings'
-import { generateArrowsHtml, getEmptyResultsHtml } from './utils/uiUtils'
 import { processCorrection } from './utils/correction'
 
 const gamemode = ref(GAMEMODE_CHUNITHM)
@@ -19,13 +18,13 @@ const selectedFormat = ref(DEFAULT_FORMAT)
 const selectedLayout = ref(DEFAULT_LAYOUT)
 const inputText = ref('')
 const outputText = ref('')
+const outputTypes = ref<string[]>([])
 const isLoading = ref(false)
-const arrowsContent = ref('')
 
 const formatOptions = ref([...DEFAULT_FORMAT_OPTIONS])
 
 const placeholderText = computed(() => {
-  return DEFAULT_PLACEHOLDER_TEXT
+  return getPlaceholderForFormat(selectedFormat.value)
 })
 
 
@@ -50,21 +49,17 @@ const loadCookie = () => {
   }
 }
 
-const setArrowHtml = (sentences: string[], results: string[]) => {
-  arrowsContent.value = generateArrowsHtml(sentences, results)
-}
 
 const processCorrectionHandler = async () => {
   saveCookie()
 
   if (!inputText.value.trim()) {
     outputText.value = ''
-    arrowsContent.value = getEmptyResultsHtml()
+    outputTypes.value = []
     return
   }
 
   isLoading.value = true
-  outputText.value = '<Loading...>'
 
   try {
     const result = await processCorrection(
@@ -75,26 +70,20 @@ const processCorrectionHandler = async () => {
 
     if (result.success) {
       outputText.value = result.correctedText
-      const originalLines = result.originalText.split('\n')
-      const correctedLines = result.correctedText.split('\n')
-      setArrowHtml(originalLines, correctedLines)
+      outputTypes.value = result.types || []
     } else {
       outputText.value = result.errorMessage || 'エラーが発生しました'
-      arrowsContent.value = getEmptyResultsHtml()
+      outputTypes.value = []
     }
   } catch (error) {
     console.error('Unexpected error during correction:', error)
     outputText.value = '予期しないエラーが発生しました'
-    arrowsContent.value = getEmptyResultsHtml()
+    outputTypes.value = []
   } finally {
     isLoading.value = false
   }
 }
 
-const deleteResult = () => {
-  outputText.value = ''
-  arrowsContent.value = getEmptyResultsHtml()
-}
 
 onMounted(() => {
   updateLabels()
@@ -114,15 +103,14 @@ onMounted(() => {
       :formatOptions="formatOptions"
       :inputText="inputText"
       :outputText="outputText"
+      :outputTypes="outputTypes"
       :isLoading="isLoading"
-      :arrowsContent="arrowsContent"
       :placeholderText="placeholderText"
       @update:gamemode="switchGamemode"
       @update:selectedFormat="selectedFormat = $event"
       @update:selectedLayout="selectedLayout = $event"
       @update:inputText="inputText = $event"
       @processCorrection="processCorrectionHandler"
-      @deleteResult="deleteResult"
     />
   </div>
 </template>

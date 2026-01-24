@@ -2,6 +2,7 @@
 
 export interface ApiResponse {
   results: string[]
+  types?: string[]
   success: boolean
   error?: string
 }
@@ -16,7 +17,10 @@ class FormatterAPIService {
   private apiUrl: string
 
   constructor() {
-    this.apiUrl = 'https://script.google.com/macros/s/AKfycbz5u5PXUo5o2OHjgumeh0YlSACW-dPBZazyfvoMhT4u6yIivSzUApb2TT99njJZf0sf/exec'
+    // 開発環境ではプロキシを使用、本番環境では直接URLを使用
+    this.apiUrl = import.meta.env.DEV
+      ? '/api'
+      : 'https://script.google.com/macros/s/AKfycbz5u5PXUo5o2OHjgumeh0YlSACW-dPBZazyfvoMhT4u6yIivSzUApb2TT99njJZf0sf/exec'
   }
 
   /**
@@ -42,7 +46,7 @@ class FormatterAPIService {
     gameType: 'chunithm' | 'sdvx',
     format: string,
     songs: string[]
-  ): Promise<string[]> {
+  ): Promise<{ results: string[]; types: string[] }> {
     try {
       const response = await fetch(this.apiUrl, {
         method: 'POST',
@@ -63,7 +67,10 @@ class FormatterAPIService {
         throw new Error(data.error || 'API request failed')
       }
 
-      return data.results
+      return {
+        results: data.results,
+        types: data.types || []
+      }
     } catch (error) {
       console.error('API request failed:', error)
       throw error

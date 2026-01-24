@@ -23,6 +23,7 @@
           v-if="selectedLayout === 'tate'"
           :inputText="inputText"
           :outputText="outputText"
+          :outputTypes="outputTypes"
           :placeholderText="placeholderText"
           @update:inputText="$emit('update:inputText', $event)"
         />
@@ -30,7 +31,7 @@
           v-else
           :inputText="inputText"
           :outputText="outputText"
-          :arrowsContent="arrowsContent"
+          :outputTypes="outputTypes"
           :placeholderText="placeholderText"
           @update:inputText="$emit('update:inputText', $event)"
         />
@@ -39,7 +40,6 @@
         <ActionButtons
           :isLoading="isLoading"
           @processCorrection="$emit('processCorrection')"
-          @deleteResult="$emit('deleteResult')"
         />
       </div>
     </div>
@@ -61,8 +61,8 @@ defineProps<{
   formatOptions: Array<{ id: string; value: string; label: string }>
   inputText: string
   outputText: string
+  outputTypes?: string[]
   isLoading: boolean
-  arrowsContent: string
   placeholderText: string
 }>()
 
@@ -71,7 +71,6 @@ const emit = defineEmits<{
   'update:selectedLayout': [value: string]
   'update:inputText': [value: string]
   processCorrection: []
-  deleteResult: []
 }>()
 
 const selectedFormat = ref('\\{Title}')
