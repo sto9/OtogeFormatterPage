@@ -8,14 +8,15 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [
     vue(),
-    tailwindcss({
-      config: './config/tailwind.config.js'
-    })
+    tailwindcss()
   ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('../src', import.meta.url)),
     },
+  },
+  build: {
+    outDir: 'docs'
   },
   server: {
     proxy: {
