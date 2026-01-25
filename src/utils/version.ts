@@ -10,7 +10,7 @@ interface VersionInfo {
 
 export async function getVersionInfo(): Promise<VersionInfo> {
   try {
-    const response = await fetch('/src/config/version.yml')
+    const response = await fetch('/version.yaml')
     const yamlText = await response.text()
     const versionInfo = yaml.load(yamlText) as VersionInfo
     return versionInfo

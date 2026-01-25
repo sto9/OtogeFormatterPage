@@ -1,4 +1,0 @@
-version: "2.0.0"
-name: "音ゲー曲の表記揺れ直すやつ"
-description: "音楽ゲームの楽曲名表記を自動修正するツール"
-author: "nurunchu"
