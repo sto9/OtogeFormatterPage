@@ -18,6 +18,7 @@ export default defineConfig({
   build: {
     outDir: 'docs'
   },
+  base: './',
   server: {
     proxy: {
       '/api': {

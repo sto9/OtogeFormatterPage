@@ -1,5 +1,7 @@
 # OtogeFormatter(旧：音ゲー曲の表記揺れ直すやつ)
 
+[OtogeFormatter](https://sto9.github.io/OtogeFormatterPage/)
+
 ## 概要
 
 音ゲー曲の表記揺れを直すためのツール(Webサイト)です。
