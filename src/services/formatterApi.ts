@@ -30,7 +30,9 @@ class FormatterAPIService {
     try {
       const response = await fetch(this.apiUrl, {
         method: 'GET',
-        redirect: 'follow'
+        redirect: 'follow',
+        mode: 'cors'
+        // GETリクエストはシンプルリクエストなのでヘッダーは不要
       })
       return await response.json()
     } catch (error) {
@@ -48,11 +50,14 @@ class FormatterAPIService {
     songs: string[]
   ): Promise<{ results: string[]; types: string[] }> {
     try {
+      // GASのCORS制限を回避するため、Content-Typeをtext/plainにする
+      // これによりプリフライトリクエストが発生しない
       const response = await fetch(this.apiUrl, {
         method: 'POST',
         redirect: 'follow',
+        mode: 'cors',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'text/plain' // application/jsonではなくtext/plainを使用
         },
         body: JSON.stringify({
           gameType,
