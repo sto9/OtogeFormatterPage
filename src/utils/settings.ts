@@ -16,8 +16,8 @@ export function saveSettings(
 ): void {
   const settings: AppSettings = {
     gamemode: gamemode,
-    'format-example-id': `format-example-choice-${selectedFormat.replace(/[\\{}]/g, '')}`,
-    'layout-id': `layout-${selectedLayout}`,
+    'format-example-id': selectedFormat,
+    'layout-id': selectedLayout,
   }
   Cookies.set('settings', JSON.stringify(settings), { expires: 60 })
 }
@@ -25,7 +25,8 @@ export function saveSettings(
 // Cookieから設定を読み込み
 export function loadSettings(): {
   gamemode: number
-  layoutId: string
+  format: string
+  layout: string
 } | null {
   const settingsStr = Cookies.get('settings')
   if (!settingsStr) return null
@@ -33,8 +34,9 @@ export function loadSettings(): {
   try {
     const settings = JSON.parse(settingsStr) as AppSettings
     return {
-      gamemode: settings.gamemode || GAMEMODE_CHUNITHM,
-      layoutId: settings['layout-id']?.replace('layout-', '') || DEFAULT_LAYOUT,
+      gamemode: settings.gamemode ?? GAMEMODE_CHUNITHM,
+      format: settings['format-example-id'] || '',
+      layout: settings['layout-id'] || DEFAULT_LAYOUT,
     }
   } catch (e) {
     console.error('Failed to load cookie settings:', e)

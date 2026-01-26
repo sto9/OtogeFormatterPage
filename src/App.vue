@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import NavBar from './components/NavBar.vue'
 import MainContent from './components/MainContent.vue'
 import {
@@ -31,6 +31,7 @@ const placeholderText = computed(() => {
 const switchGamemode = (newGamemode: number) => {
   gamemode.value = newGamemode
   updateLabels()
+  saveCookie()
 }
 
 const updateLabels = () => {
@@ -44,14 +45,17 @@ const saveCookie = () => {
 const loadCookie = () => {
   const settings = loadSettings()
   if (settings) {
-    switchGamemode(settings.gamemode)
-    selectedLayout.value = settings.layoutId
+    gamemode.value = settings.gamemode
+    if (settings.format) {
+      selectedFormat.value = settings.format
+    }
+    selectedLayout.value = settings.layout
+    updateLabels()
   }
 }
 
 
 const processCorrectionHandler = async () => {
-  saveCookie()
 
   if (!inputText.value.trim()) {
     outputText.value = ''
@@ -85,9 +89,14 @@ const processCorrectionHandler = async () => {
 }
 
 
+// フォーマットとレイアウトの変更を監視してCookieに保存
+watch([selectedFormat, selectedLayout], () => {
+  saveCookie()
+})
+
 onMounted(() => {
-  updateLabels()
   loadCookie()
+  updateLabels()
 })
 </script>
 
