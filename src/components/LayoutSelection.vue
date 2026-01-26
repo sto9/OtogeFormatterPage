@@ -4,7 +4,7 @@
     <h3 class="text-2xl font-extrabold mb-4 text-gray-900">レイアウト</h3>
     <div class="grid grid-cols-2 gap-4">
       <label
-        class="flex items-center p-3 rounded-xl cursor-pointer transition-colors duration-100 border-2"
+        class="flex items-center p-2 rounded-xl cursor-pointer transition-colors duration-100 border-2"
         :class="selectedLayout === 'tate' ? 'bg-blue-100 border-blue-300' : 'border-gray-200 hover:bg-gray-100'"
         for="layout-tate"
       >
@@ -27,7 +27,7 @@
         </div>
       </label>
       <label
-        class="flex items-center p-3 rounded-xl cursor-pointer transition-colors duration-100 border-2"
+        class="flex items-center p-2 rounded-xl cursor-pointer transition-colors duration-100 border-2"
         :class="selectedLayout === 'yoko' ? 'bg-blue-100 border-blue-300' : 'border-gray-200 hover:bg-gray-100'"
         for="layout-yoko"
       >
@@ -46,7 +46,7 @@
             :class="selectedLayout === 'yoko' ? 'text-blue-700' : 'text-gray-800'"
             >左右</span
           >
-          <span class="text-sm text-gray-500">PC推奨、修正有無を表示</span>
+          <span class="text-sm text-gray-500">PC推奨</span>
         </div>
       </label>
     </div>

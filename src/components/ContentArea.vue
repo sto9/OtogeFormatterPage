@@ -1,13 +1,7 @@
 <template>
-  <div
-    class="min-h-[calc(100vh-120px)] pb-4 transition-all duration-300"
-    :class="{
-      'bg-gradient-to-r from-amber-50 to-yellow-100': gamemode === GAMEMODE_CHUNITHM,
-      'bg-gradient-to-r from-cyan-50 to-pink-100': gamemode === GAMEMODE_SDVX,
-    }"
-  >
-    <div class="w-full px-8 py-4">
-      <div class="max-w-7xl mx-auto bg-white rounded-xl shadow-lg p-6">
+  <div class="min-h-[calc(100vh-50px)] pb-4">
+    <div class="w-full px-4 md:px-8 lg:px-12 xl:px-16 py-4">
+      <div class="max-w-7xl mx-auto bg-white rounded-xl shadow-lg p-4 md:p-6">
         <!-- Format Selection -->
         <FormatSelection
           :formatOptions="formatOptions"

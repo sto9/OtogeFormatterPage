@@ -2,6 +2,7 @@
 import { ref, onMounted, computed, watch } from 'vue'
 import NavBar from './components/NavBar.vue'
 import MainContent from './components/MainContent.vue'
+import VersionDisplay from './components/VersionDisplay.vue'
 import {
   GAMEMODE_CHUNITHM,
   DEFAULT_FORMAT_OPTIONS,
@@ -101,7 +102,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div
+    class="min-h-screen transition-all duration-300"
+    :class="{
+      'bg-gradient-to-r from-amber-50 to-yellow-100': gamemode === 0,
+      'bg-gradient-to-r from-cyan-50 to-pink-100': gamemode === 1,
+    }"
+  >
     <!-- Header -->
     <NavBar />
 
@@ -123,6 +130,9 @@ onMounted(() => {
       @update:inputText="inputText = $event"
       @processCorrection="processCorrectionHandler"
     />
+
+    <!-- Version Display -->
+    <VersionDisplay />
   </div>
 </template>
 

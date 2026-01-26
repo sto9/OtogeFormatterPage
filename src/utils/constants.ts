@@ -43,8 +43,8 @@ const SYMBOL_DIFF_END = '\\{DiffEnd}'
 
 // サンプルデータ
 const SAMPLE_SONGS = [
-  { title: '曲名1', diff: '難易度', level: 'レベル' },
-  { title: '曲名2', diff: '難易度', level: 'レベル' }
+  { title: '曲名1', diff: 'Diff', level: 'Lv' },
+  { title: '曲名2', diff: 'Diff', level: 'Lv' }
 ]
 
 function isMatchSymbol(s: string, i: number, symbol: string): boolean {

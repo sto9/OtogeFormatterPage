@@ -5,7 +5,7 @@
     <div class="grid grid-cols-2 gap-4">
       <!-- Input Section -->
       <div>
-        <label class="block text-2xl font-extrabold text-gray-900 mb-2">修正前</label>
+        <label class="block text-2xl font-extrabold text-gray-900 mb-2 whitespace-nowrap">修正前</label>
         <div class="relative">
           <textarea
             id="input-multi-yoko"
@@ -20,7 +20,7 @@
           <!-- Placeholder -->
           <div
             v-if="showPlaceholder"
-            class="absolute top-4 left-5 text-gray-400 text-lg leading-relaxed pointer-events-none bg-transparent z-10 whitespace-pre-line font-mono"
+            class="absolute top-4 left-5 text-gray-400 text-lg leading-relaxed pointer-events-none bg-transparent z-10 whitespace-pre font-mono"
             v-html="placeholderText"
           ></div>
         </div>
@@ -28,7 +28,7 @@
 
       <!-- Output Section -->
       <div>
-        <label class="block text-2xl font-extrabold text-gray-900 mb-2">修正後</label>
+        <label class="block text-2xl font-extrabold text-gray-900 mb-2 whitespace-nowrap">修正後</label>
         <div
           class="w-full px-4 py-3 border-2 border-emerald-200 rounded-xl bg-emerald-50 font-mono text-lg whitespace-pre-line"
           :style="{ minHeight: dynamicHeight }"

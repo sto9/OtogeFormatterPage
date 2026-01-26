@@ -6,7 +6,7 @@
       <label
         v-for="option in formatOptions"
         :key="option.id"
-        class="flex items-center p-4 rounded-xl cursor-pointer transition-colors duration-100 border-2"
+        class="flex items-center p-2 rounded-xl cursor-pointer transition-colors duration-100 border-2"
         :class="selectedFormat === option.value ? 'bg-blue-100 border-blue-300' : 'border-gray-200 hover:bg-gray-100'"
         :for="option.id"
       >

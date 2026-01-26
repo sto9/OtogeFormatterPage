@@ -2,7 +2,7 @@
   <!-- Vertical Layout -->
   <div class="space-y-4">
     <div>
-      <label for="input-multi-tate" class="block text-2xl font-extrabold text-gray-900 mb-2"
+      <label for="input-multi-tate" class="block text-2xl font-extrabold text-gray-900 mb-2 whitespace-nowrap"
         >修正前</label
       >
       <div class="relative">
@@ -17,13 +17,13 @@
         ></textarea>
         <div
           v-if="showPlaceholder"
-          class="absolute top-4 left-5 text-gray-400 text-lg leading-relaxed pointer-events-none bg-transparent z-10 whitespace-pre-line font-mono"
+          class="absolute top-4 left-5 text-gray-400 text-lg leading-relaxed pointer-events-none bg-transparent z-10 whitespace-pre font-mono"
           v-html="placeholderText"
         ></div>
       </div>
     </div>
     <div>
-      <label for="output-multi-tate" class="block text-2xl font-extrabold text-gray-900 mb-2"
+      <label for="output-multi-tate" class="block text-2xl font-extrabold text-gray-900 mb-2 whitespace-nowrap"
         >修正後</label
       >
       <div
