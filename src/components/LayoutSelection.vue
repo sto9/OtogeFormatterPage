@@ -15,7 +15,7 @@
           id="layout-tate"
           value="tate"
           :checked="selectedLayout === 'tate'"
-          @change="() => { selectedLayout = 'tate'; $emit('update:selectedLayout', 'tate'); }"
+          @change="() => { $emit('update:selectedLayout', 'tate'); }"
         />
         <div class="select-none">
           <span
@@ -38,7 +38,7 @@
           id="layout-yoko"
           value="yoko"
           :checked="selectedLayout === 'yoko'"
-          @change="() => { selectedLayout = 'yoko'; $emit('update:selectedLayout', 'yoko'); }"
+          @change="() => { $emit('update:selectedLayout', 'yoko'); }"
         />
         <div class="select-none">
           <span
@@ -54,13 +54,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+defineProps<{
+  selectedLayout: string
+}>()
 
 defineEmits<{
   'update:selectedLayout': [value: string]
 }>()
-
-const selectedLayout = ref('tate')
 </script>
 
 <style scoped>

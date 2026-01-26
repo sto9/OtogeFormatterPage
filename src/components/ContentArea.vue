@@ -16,7 +16,9 @@
         />
 
         <!-- Layout Selection -->
-        <LayoutSelection @update:selectedLayout="handleLayoutChange" />
+        <LayoutSelection
+          :selectedLayout="selectedLayout"
+          @update:selectedLayout="handleLayoutChange" />
 
         <!-- Text Area Display -->
         <VerticalTextAreaDisplay
@@ -47,7 +49,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 const GAMEMODE_CHUNITHM = 0
 const GAMEMODE_SDVX = 1
 import FormatSelection from './FormatSelection.vue'
@@ -59,6 +60,8 @@ import ActionButtons from './ActionButtons.vue'
 defineProps<{
   gamemode: number
   formatOptions: Array<{ id: string; value: string; label: string }>
+  selectedFormat: string
+  selectedLayout: string
   inputText: string
   outputText: string
   outputTypes?: string[]
@@ -73,16 +76,11 @@ const emit = defineEmits<{
   processCorrection: []
 }>()
 
-const selectedFormat = ref('\\{Title}')
-const selectedLayout = ref('tate')
-
 const handleFormatChange = (format: string) => {
-  selectedFormat.value = format
   emit('update:selectedFormat', format)
 }
 
 const handleLayoutChange = (layout: string) => {
-  selectedLayout.value = layout
   emit('update:selectedLayout', layout)
 }
 </script>

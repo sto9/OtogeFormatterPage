@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 
 const props = defineProps<{
   formatOptions: Array<{ id: string; value: string; label: string }>
@@ -54,10 +54,6 @@ watch(
   },
 )
 
-// Emit initial value on mount
-onMounted(() => {
-  emit('update:selectedFormat', selectedFormat.value)
-})
 
 // Update the change handler
 const handleChange = (value: string) => {

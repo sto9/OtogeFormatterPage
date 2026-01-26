@@ -7,6 +7,8 @@
     <ContentArea
       :gamemode="gamemode"
       :formatOptions="formatOptions"
+      :selectedFormat="selectedFormat"
+      :selectedLayout="selectedLayout"
       :inputText="inputText"
       :outputText="outputText"
       :outputTypes="outputTypes"
@@ -27,6 +29,8 @@ import ContentArea from './ContentArea.vue'
 defineProps<{
   gamemode: number
   formatOptions: Array<{ id: string; value: string; label: string }>
+  selectedFormat: string
+  selectedLayout: string
   inputText: string
   outputText: string
   outputTypes?: string[]
