@@ -19,9 +19,6 @@ export function updateFormatLabels(formatOptions: FormatOption[], gamemode: numb
         case '\\{DiffBegin}[\\{Level}]\\{DiffEnd}\\{Title}\\{DiffBegin}(\\{DIFF})\\{DiffEnd}':
           option.label = '[12]光線チューニング(MAS)'
           break
-        case '\\{DiffBegin}[\\{Level}]\\{DiffEnd}\\{Title}':
-          option.label = '[12]光線チューニング'
-          break
         case '\\{Title}\\{DiffBegin}[\\{DIFF}\\{Level}]\\{DiffEnd}':
           option.label = '光線チューニング[MAS12]'
           break
@@ -38,9 +35,6 @@ export function updateFormatLabels(formatOptions: FormatOption[], gamemode: numb
           break
         case '\\{DiffBegin}[\\{Level}]\\{DiffEnd}\\{Title}\\{DiffBegin}(\\{DIFF})\\{DiffEnd}':
           option.label = '[17]大宇宙ステージ(EXH)'
-          break
-        case '\\{DiffBegin}[\\{Level}]\\{DiffEnd}\\{Title}':
-          option.label = '[17]大宇宙ステージ'
           break
         case '\\{Title}\\{DiffBegin}[\\{DIFF}\\{Level}]\\{DiffEnd}':
           option.label = '大宇宙ステージ[EXH17]'

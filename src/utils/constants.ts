@@ -22,11 +22,6 @@ export const DEFAULT_FORMAT_OPTIONS: FormatOption[] = [
     label: '',
   },
   {
-    id: 'format-example-choice-lt',
-    value: '\\{DiffBegin}[\\{Level}]\\{DiffEnd}\\{Title}',
-    label: '',
-  },
-  {
     id: 'format-example-choice-tdl',
     value: '\\{Title}\\{DiffBegin}[\\{DIFF}\\{Level}]\\{DiffEnd}',
     label: '',
