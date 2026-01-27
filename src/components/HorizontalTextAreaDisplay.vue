@@ -9,7 +9,7 @@
         <div class="relative">
           <textarea
             id="input-multi-yoko"
-            class="w-full px-2 py-2 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-lg resize-none bg-gray-50 hover:border-gray-300"
+            class="w-full px-1.5 py-1 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-lg resize-none bg-gray-50 hover:border-gray-300"
             :style="{ height: dynamicHeight }"
             :value="inputText"
             @input="(event) => { $emit('update:inputText', (event.target as HTMLTextAreaElement).value); }"
@@ -20,7 +20,7 @@
           <!-- Placeholder -->
           <div
             v-if="showPlaceholder"
-            class="absolute top-2 left-2 text-gray-400 text-lg leading-relaxed pointer-events-none bg-transparent z-10 whitespace-pre font-mono"
+            class="absolute top-1 left-1.5 text-gray-400 text-lg leading-relaxed pointer-events-none bg-transparent z-10 whitespace-pre font-mono"
             v-html="placeholderText"
           ></div>
         </div>
@@ -30,7 +30,7 @@
       <div>
         <label class="block text-2xl font-extrabold text-gray-900 mb-2 whitespace-nowrap">修正後</label>
         <div
-          class="w-full px-2 py-2 border-2 border-emerald-200 rounded-xl bg-emerald-50 font-mono text-lg whitespace-pre-line"
+          class="w-full px-1.5 py-1 border-2 border-emerald-200 rounded-xl bg-emerald-50 font-mono text-lg whitespace-pre-line"
           :style="{ minHeight: dynamicHeight }"
         >
           <div
