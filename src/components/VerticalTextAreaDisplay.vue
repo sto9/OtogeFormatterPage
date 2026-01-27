@@ -8,7 +8,8 @@
       <div class="relative">
         <textarea
           id="input-multi-tate"
-          class="block w-full px-1.5 py-1 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-lg leading-relaxed resize-none bg-gray-50 hover:border-gray-300"
+          class="block w-full px-3 py-2 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-lg leading-relaxed resize-none bg-gray-50 hover:border-gray-300 overflow-x-auto"
+          wrap="off"
           :style="{ height: dynamicHeight }"
           :value="inputText"
           @input="(event) => { $emit('update:inputText', (event.target as HTMLTextAreaElement).value); }"
@@ -17,7 +18,7 @@
         ></textarea>
         <div
           v-if="showPlaceholder"
-          class="absolute top-1 left-1.5 text-gray-400 text-lg leading-relaxed pointer-events-none bg-transparent z-10 whitespace-pre font-mono"
+          class="absolute top-2 left-3 text-gray-400 text-lg leading-relaxed pointer-events-none bg-transparent z-10 whitespace-pre font-mono"
           v-html="placeholderText"
         ></div>
       </div>
@@ -27,13 +28,13 @@
         >修正後</label
       >
       <div
-        class="block w-full px-1.5 py-1 border-2 border-emerald-200 rounded-xl bg-emerald-50 font-mono text-lg leading-relaxed"
+        class="block w-full px-3 py-2 border-2 border-emerald-200 rounded-xl bg-emerald-50 font-mono text-lg leading-relaxed overflow-x-auto"
         :style="{ minHeight: dynamicHeight }"
       >
         <div
           v-for="(line, index) in outputLines"
           :key="index"
-          :class="getLineClass(line.type)"
+          :class="[getLineClass(line.type), 'whitespace-pre']"
         >
           {{ line.text }}
         </div>

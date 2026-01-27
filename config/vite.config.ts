@@ -18,15 +18,5 @@ export default defineConfig({
   build: {
     outDir: 'docs'
   },
-  base: './',
-  server: {
-    proxy: {
-      '/api': {
-        target: 'https://script.google.com',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '/macros/s/AKfycbz5u5PXUo5o2OHjgumeh0YlSACW-dPBZazyfvoMhT4u6yIivSzUApb2TT99njJZf0sf/exec'),
-        secure: true
-      }
-    }
-  }
+  base: './'
 })

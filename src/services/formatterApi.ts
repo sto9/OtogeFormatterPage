@@ -17,10 +17,7 @@ class FormatterAPIService {
   private apiUrl: string
 
   constructor() {
-    // 開発環境ではプロキシを使用、本番環境では直接URLを使用
-    this.apiUrl = import.meta.env.DEV
-      ? '/api'
-      : 'https://script.google.com/macros/s/AKfycbz5u5PXUo5o2OHjgumeh0YlSACW-dPBZazyfvoMhT4u6yIivSzUApb2TT99njJZf0sf/exec'
+    this.apiUrl = 'https://script.google.com/macros/s/AKfycbz5u5PXUo5o2OHjgumeh0YlSACW-dPBZazyfvoMhT4u6yIivSzUApb2TT99njJZf0sf/exec'
   }
 
   /**

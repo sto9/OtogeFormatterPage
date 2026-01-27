@@ -13,6 +13,7 @@ import {
 import { updateFormatLabels } from './utils/gameMode'
 import { saveSettings, loadSettings } from './utils/settings'
 import { processCorrection } from './utils/correction'
+import { processClientCorrection, preloadMusicData } from './utils/clientCorrection'
 
 const gamemode = ref(GAMEMODE_CHUNITHM)
 const selectedFormat = ref(DEFAULT_FORMAT)
@@ -21,6 +22,8 @@ const inputText = ref('')
 const outputText = ref('')
 const outputTypes = ref<string[]>([])
 const isLoading = ref(false)
+const useClientSearch = ref(true) // クライアント側の検索を使用するかどうか
+const isMusicDataLoaded = ref(false)
 
 const formatOptions = ref([...DEFAULT_FORMAT_OPTIONS])
 
@@ -29,10 +32,20 @@ const placeholderText = computed(() => {
 })
 
 
-const switchGamemode = (newGamemode: number) => {
+const switchGamemode = async (newGamemode: number) => {
   gamemode.value = newGamemode
   updateLabels()
   saveCookie()
+
+  // ゲームモード変更時に楽曲データをロード（キャッシュ済みなら即座に返る）
+  if (useClientSearch.value) {
+    try {
+      await preloadMusicData(newGamemode)
+      console.log('Music data loaded for game mode:', newGamemode)
+    } catch (error) {
+      console.error('Failed to load music data:', error)
+    }
+  }
 }
 
 const updateLabels = () => {
@@ -67,11 +80,18 @@ const processCorrectionHandler = async () => {
   isLoading.value = true
 
   try {
-    const result = await processCorrection(
-      inputText.value,
-      gamemode.value,
-      selectedFormat.value
-    )
+    // クライアント側の検索を使用するか判定
+    const result = useClientSearch.value
+      ? await processClientCorrection(
+          inputText.value,
+          gamemode.value,
+          selectedFormat.value
+        )
+      : await processCorrection(
+          inputText.value,
+          gamemode.value,
+          selectedFormat.value
+        )
 
     if (result.success) {
       outputText.value = result.correctedText
@@ -95,9 +115,20 @@ watch([selectedFormat, selectedLayout], () => {
   saveCookie()
 })
 
-onMounted(() => {
+onMounted(async () => {
   loadCookie()
   updateLabels()
+
+  // クライアント側検索を使用する場合は現在のゲームモードの楽曲データをプリロード
+  if (useClientSearch.value) {
+    try {
+      await preloadMusicData(gamemode.value)
+      isMusicDataLoaded.value = true
+      console.log('Music data preloaded for game mode:', gamemode.value)
+    } catch (error) {
+      console.error('Failed to preload music data:', error)
+    }
+  }
 })
 </script>
 
