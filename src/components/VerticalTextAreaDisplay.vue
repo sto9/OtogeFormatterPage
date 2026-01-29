@@ -24,9 +24,18 @@
       </div>
     </div>
     <div>
-      <label for="output-multi-tate" class="block text-2xl font-extrabold text-gray-900 mb-2 whitespace-nowrap"
-        >修正後</label
-      >
+      <div class="flex items-end gap-2 mb-2">
+        <label for="output-multi-tate" class="text-2xl font-extrabold text-gray-900 whitespace-nowrap"
+          >修正後</label
+        >
+        <button
+          v-if="outputText"
+          @click="copyToClipboard"
+          class="px-2 pt-0 pb-0.5 text-sm font-semibold rounded bg-emerald-200 hover:bg-emerald-300 text-emerald-900 transition-colors min-w-16 text-center"
+        >
+          {{ copyButtonText }}
+        </button>
+      </div>
       <div
         class="block w-full px-3 py-2 border-2 border-emerald-200 rounded-xl bg-emerald-50 font-mono text-lg leading-relaxed overflow-x-auto"
         :style="{ minHeight: dynamicHeight }"
@@ -63,8 +72,22 @@ defineEmits<{
 }>()
 
 const isComposing = ref(false)
+const copyButtonText = ref('Copy')
 
 const showPlaceholder = computed(() => props.inputText === '' && !isComposing.value)
+
+const copyToClipboard = async () => {
+  if (!props.outputText) return
+  try {
+    await navigator.clipboard.writeText(props.outputText)
+    copyButtonText.value = 'Copied!'
+    setTimeout(() => {
+      copyButtonText.value = 'Copy'
+    }, 2000)
+  } catch (err) {
+    console.error('Failed to copy:', err)
+  }
+}
 
 // 行数を計算する関数
 const calculateLines = (text: string): number => {
