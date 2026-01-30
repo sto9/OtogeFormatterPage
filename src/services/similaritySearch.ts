@@ -116,7 +116,7 @@ function calcDiffScore(s: string, t: string): number {
 }
 
 // フォーマットに従って文章を生成
-function getTargetSentence(data: MusicData, format: string, diff: string, alias: string = ''): string {
+function getTargetSentence(data: MusicData, format: string, diff: string, gamemode: number, alias: string = ''): string {
   let target_sentence = ''
   let diff_skip = false
 
@@ -137,7 +137,12 @@ function getTargetSentence(data: MusicData, format: string, diff: string, alias:
         i += SYMBOL_DIFF_END.length
       } else if (isMatchSymbol(format, i, SYMBOL_LEVEL)) {
         if (diff !== '' && data.data[diff]) {
-          target_sentence += data.data[diff]
+          let level = data.data[diff]
+          // CHUNITHMの場合、.5を+に変換
+          if (gamemode === GAMEMODE_CHUNITHM && level.endsWith('.5')) {
+            level = level.slice(0, -2) + '+'
+          }
+          target_sentence += level
         }
         i += SYMBOL_LEVEL.length
       } else if (isMatchSymbol(format, i, SYMBOL_DIFF_UPPER)) {
@@ -228,7 +233,7 @@ export function getMostSimilarSentence(
         continue
       }
 
-      const target_sentence = getTargetSentence(data, format, diff)
+      const target_sentence = getTargetSentence(data, format, diff, gamemode)
       const score = calcDiffScore(sentence, target_sentence)
       if (score < min_score) {
         min_score = score
@@ -238,7 +243,7 @@ export function getMostSimilarSentence(
       // エイリアスがある場合の処理
       if (data.meta.alias) {
         for (const alias of data.meta.alias) {
-          const alias_sentence = getTargetSentence(data, format, diff, alias)
+          const alias_sentence = getTargetSentence(data, format, diff, gamemode, alias)
           const alias_score = calcDiffScore(sentence, alias_sentence)
           if (alias_score < min_score) {
             min_score = alias_score
@@ -255,7 +260,7 @@ export function getMostSimilarSentence(
 
   // 難易度を推定
   const most_likely_diff = getMostLikelyDiff(sentence, most_similar_data, gamemode)
-  const result = getTargetSentence(most_similar_data, format, most_likely_diff)
+  const result = getTargetSentence(most_similar_data, format, most_likely_diff, gamemode)
 
   // 元の文字列と一致しているか確認
   let type: 'normal' | 'bold' | 'red' = 'normal'
