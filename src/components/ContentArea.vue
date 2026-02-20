@@ -14,6 +14,57 @@
           :selectedLayout="selectedLayout"
           @update:selectedLayout="handleLayoutChange" />
 
+        <!-- maimai STD/DX Display Mode -->
+        <div v-if="gamemode === GAMEMODE_MAIMAI" class="mb-6">
+          <h3 class="text-2xl font-extrabold mb-4 text-gray-900">STD/DX 表示</h3>
+          <div class="grid grid-cols-2 gap-4">
+            <label
+              class="flex items-center p-2 rounded-xl cursor-pointer transition-colors duration-100 border-2"
+              :class="maimaiChartTypeMode === 'both-only' ? 'bg-blue-100 border-blue-300' : 'border-gray-200 hover:bg-gray-100'"
+              for="chart-type-both-only"
+            >
+              <input
+                class="sr-only"
+                type="radio"
+                name="chart-type-mode"
+                id="chart-type-both-only"
+                value="both-only"
+                :checked="maimaiChartTypeMode === 'both-only'"
+                @change="() => { $emit('update:maimaiChartTypeMode', 'both-only'); }"
+              />
+              <div class="select-none">
+                <span
+                  class="font-bold text-lg block transition-colors duration-100"
+                  :class="maimaiChartTypeMode === 'both-only' ? 'text-blue-700' : 'text-gray-800'"
+                >両方あるときだけ</span>
+                <span class="text-sm text-gray-500">STD/DX両方ある曲のみ表示</span>
+              </div>
+            </label>
+            <label
+              class="flex items-center p-2 rounded-xl cursor-pointer transition-colors duration-100 border-2"
+              :class="maimaiChartTypeMode === 'always' ? 'bg-blue-100 border-blue-300' : 'border-gray-200 hover:bg-gray-100'"
+              for="chart-type-always"
+            >
+              <input
+                class="sr-only"
+                type="radio"
+                name="chart-type-mode"
+                id="chart-type-always"
+                value="always"
+                :checked="maimaiChartTypeMode === 'always'"
+                @change="() => { $emit('update:maimaiChartTypeMode', 'always'); }"
+              />
+              <div class="select-none">
+                <span
+                  class="font-bold text-lg block transition-colors duration-100"
+                  :class="maimaiChartTypeMode === 'always' ? 'text-blue-700' : 'text-gray-800'"
+                >常に表示</span>
+                <span class="text-sm text-gray-500">全曲にSTD/DXを表示</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
         <!-- Text Area Display -->
         <VerticalTextAreaDisplay
           v-if="selectedLayout === 'tate'"
@@ -43,8 +94,7 @@
 </template>
 
 <script setup lang="ts">
-const GAMEMODE_CHUNITHM = 0
-const GAMEMODE_SDVX = 1
+import { GAMEMODE_MAIMAI } from '../services/similaritySearch'
 import FormatSelection from './FormatSelection.vue'
 import LayoutSelection from './LayoutSelection.vue'
 import VerticalTextAreaDisplay from './VerticalTextAreaDisplay.vue'
@@ -56,6 +106,7 @@ defineProps<{
   formatOptions: Array<{ id: string; value: string; label: string }>
   selectedFormat: string
   selectedLayout: string
+  maimaiChartTypeMode: string
   inputText: string
   outputText: string
   outputTypes?: string[]
@@ -66,6 +117,7 @@ defineProps<{
 const emit = defineEmits<{
   'update:selectedFormat': [value: string]
   'update:selectedLayout': [value: string]
+  'update:maimaiChartTypeMode': [value: string]
   'update:inputText': [value: string]
   processCorrection: []
 }>()

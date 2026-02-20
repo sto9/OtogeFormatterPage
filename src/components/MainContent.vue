@@ -9,6 +9,7 @@
       :formatOptions="formatOptions"
       :selectedFormat="selectedFormat"
       :selectedLayout="selectedLayout"
+      :maimaiChartTypeMode="maimaiChartTypeMode"
       :inputText="inputText"
       :outputText="outputText"
       :outputTypes="outputTypes"
@@ -16,6 +17,7 @@
       :placeholderText="placeholderText"
       @update:selectedFormat="$emit('update:selectedFormat', $event)"
       @update:selectedLayout="$emit('update:selectedLayout', $event)"
+      @update:maimaiChartTypeMode="$emit('update:maimaiChartTypeMode', $event)"
       @update:inputText="$emit('update:inputText', $event)"
       @processCorrection="$emit('processCorrection')"
     />
@@ -31,6 +33,7 @@ defineProps<{
   formatOptions: Array<{ id: string; value: string; label: string }>
   selectedFormat: string
   selectedLayout: string
+  maimaiChartTypeMode: string
   inputText: string
   outputText: string
   outputTypes?: string[]
@@ -42,6 +45,7 @@ defineEmits<{
   'update:gamemode': [value: number]
   'update:selectedFormat': [value: string]
   'update:selectedLayout': [value: string]
+  'update:maimaiChartTypeMode': [value: string]
   'update:inputText': [value: string]
   processCorrection: []
 }>()

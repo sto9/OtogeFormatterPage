@@ -14,8 +14,8 @@
 
 - CHUNITHM
 - SOUND VOLTEX
-- maimai(予定)
-- オンゲキ(予定)
+- maimai
+- オンゲキ
 
 ## 使い方
 

@@ -1,6 +1,6 @@
 // クライアント側で表記揺れ修正処理を行う
 
-import { getMostSimilarSentence } from '../services/similaritySearch'
+import { getMostSimilarSentence, type ChartTypeMode } from '../services/similaritySearch'
 import { musicDataService } from '../services/musicDataService'
 import { gameModeToString } from './gameMode'
 import { processInputText, restoreResultsFormat } from './uiUtils'
@@ -18,7 +18,8 @@ export interface CorrectionResult {
 export async function processClientCorrection(
   inputText: string,
   gamemode: number,
-  selectedFormat: string
+  selectedFormat: string,
+  chartTypeMode: ChartTypeMode = 'both-only'
 ): Promise<CorrectionResult> {
   if (!inputText.trim()) {
     return {
@@ -47,7 +48,7 @@ export async function processClientCorrection(
         results.push('')
         types.push('normal')
       } else {
-        const { result, type } = getMostSimilarSentence(line, selectedFormat, gamemode, musicData)
+        const { result, type } = getMostSimilarSentence(line, selectedFormat, gamemode, musicData, chartTypeMode)
         results.push(result)
         types.push(type)
       }

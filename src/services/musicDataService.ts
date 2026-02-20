@@ -1,7 +1,7 @@
 // 楽曲データのキャッシュと管理を行うサービス
 
 import type { MusicData } from './similaritySearch'
-import { GAMEMODE_CHUNITHM, GAMEMODE_SDVX } from './similaritySearch'
+import { GAMEMODE_CHUNITHM, GAMEMODE_SDVX, GAMEMODE_MAIMAI, GAMEMODE_ONGEKI } from './similaritySearch'
 
 export interface ApiResponse {
   songs: MusicData[]
@@ -14,10 +14,14 @@ class MusicDataService {
   private musicDataCache: { [key: number]: MusicData[] } = {
     0: [], // CHUNITHM
     1: [], // SDVX
+    2: [], // maimai
+    3: [], // オンゲキ
   }
   private loadingPromise: { [key: number]: Promise<MusicData[]> | null } = {
     0: null,
     1: null,
+    2: null,
+    3: null,
   }
 
   constructor() {
@@ -51,10 +55,68 @@ class MusicDataService {
   }
 
   /**
+   * maimai APIレスポンスのdataキーを正規化（REMAS → ReMAS）
+   */
+  private normalizeMaimaiKeys(data: { [key: string]: string }): { [key: string]: string } {
+    const normalized: { [key: string]: string } = {}
+    for (const [key, value] of Object.entries(data)) {
+      normalized[key === 'REMAS' ? 'ReMAS' : key] = value
+    }
+    return normalized
+  }
+
+  /**
+   * maimai APIレスポンスをフラット構造に変換
+   * API形式: { meta: { title }, data: { std: {...}, dx: {...} } }
+   * → MusicData[]: { meta: { title, chartType, hasBothTypes }, data: { BAS:..., MAS:... } }
+   */
+  private transformMaimaiData(songs: any[]): MusicData[] {
+    const result: MusicData[] = []
+
+    for (const song of songs) {
+      const title = song.meta?.title || ''
+      const alias = song.meta?.alias
+      const stdData = song.data?.std
+      const dxData = song.data?.dx
+      const hasBothTypes = !!(stdData && dxData && Object.keys(stdData).length > 0 && Object.keys(dxData).length > 0)
+
+      if (stdData && Object.keys(stdData).length > 0) {
+        result.push({
+          meta: { title, ...(alias ? { alias } : {}), chartType: 'STD', hasBothTypes },
+          data: this.normalizeMaimaiKeys(stdData),
+        })
+      }
+
+      if (dxData && Object.keys(dxData).length > 0) {
+        result.push({
+          meta: { title, ...(alias ? { alias } : {}), chartType: 'DX', hasBothTypes },
+          data: this.normalizeMaimaiKeys(dxData),
+        })
+      }
+
+      // STDもDXもない場合（フォールバック）
+      if ((!stdData || Object.keys(stdData).length === 0) && (!dxData || Object.keys(dxData).length === 0)) {
+        result.push({
+          meta: { title, ...(alias ? { alias } : {}), hasBothTypes: false },
+          data: song.data ? this.normalizeMaimaiKeys(song.data) : {},
+        })
+      }
+    }
+
+    return result
+  }
+
+  /**
    * APIから楽曲データを読み込む
    */
   private async loadMusicData(gamemode: number): Promise<MusicData[]> {
-    const gameType = gamemode === GAMEMODE_CHUNITHM ? 'chunithm' : 'sdvx'
+    const gameTypeMap: { [key: number]: string } = {
+      [GAMEMODE_CHUNITHM]: 'chunithm',
+      [GAMEMODE_SDVX]: 'sdvx',
+      [GAMEMODE_MAIMAI]: 'maimai',
+      [GAMEMODE_ONGEKI]: 'ongeki',
+    }
+    const gameType = gameTypeMap[gamemode] || 'chunithm'
 
     try {
       // GETリクエストでクエリパラメータを使用（エイリアス付き）
@@ -71,6 +133,11 @@ class MusicDataService {
 
       if (!data.success) {
         throw new Error(data.error || 'API request failed')
+      }
+
+      // maimaiの場合はstd/dx構造をフラットに変換
+      if (gamemode === GAMEMODE_MAIMAI) {
+        return this.transformMaimaiData(data.songs)
       }
 
       return data.songs
@@ -99,7 +166,9 @@ class MusicDataService {
     try {
       await Promise.all([
         this.getMusicData(GAMEMODE_CHUNITHM),
-        this.getMusicData(GAMEMODE_SDVX)
+        this.getMusicData(GAMEMODE_SDVX),
+        this.getMusicData(GAMEMODE_MAIMAI),
+        this.getMusicData(GAMEMODE_ONGEKI),
       ])
     } catch (error) {
       console.error('Failed to preload all music data:', error)
@@ -111,7 +180,9 @@ class MusicDataService {
    */
   isAllDataLoaded(): boolean {
     return this.musicDataCache[GAMEMODE_CHUNITHM].length > 0 &&
-           this.musicDataCache[GAMEMODE_SDVX].length > 0
+           this.musicDataCache[GAMEMODE_SDVX].length > 0 &&
+           this.musicDataCache[GAMEMODE_MAIMAI].length > 0 &&
+           this.musicDataCache[GAMEMODE_ONGEKI].length > 0
   }
 
   /**
@@ -120,6 +191,8 @@ class MusicDataService {
   clearCache(): void {
     this.musicDataCache[0] = []
     this.musicDataCache[1] = []
+    this.musicDataCache[2] = []
+    this.musicDataCache[3] = []
   }
 
   /**

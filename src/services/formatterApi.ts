@@ -42,7 +42,7 @@ class FormatterAPIService {
    * 表記揺れを修正
    */
   async fixSongs(
-    gameType: 'chunithm' | 'sdvx',
+    gameType: 'chunithm' | 'sdvx' | 'maimai' | 'ongeki',
     format: string,
     songs: string[]
   ): Promise<{ results: string[]; types: string[] }> {

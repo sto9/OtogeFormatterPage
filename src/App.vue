@@ -14,10 +14,12 @@ import { updateFormatLabels } from './utils/gameMode'
 import { saveSettings, loadSettings } from './utils/settings'
 import { processCorrection } from './utils/correction'
 import { processClientCorrection, preloadMusicData } from './utils/clientCorrection'
+import type { ChartTypeMode } from './services/similaritySearch'
 
 const gamemode = ref(GAMEMODE_CHUNITHM)
 const selectedFormat = ref(DEFAULT_FORMAT)
 const selectedLayout = ref(DEFAULT_LAYOUT)
+const maimaiChartTypeMode = ref<ChartTypeMode>('both-only')
 const inputText = ref('')
 const outputText = ref('')
 const outputTypes = ref<string[]>([])
@@ -53,7 +55,7 @@ const updateLabels = () => {
 }
 
 const saveCookie = () => {
-  saveSettings(gamemode.value, selectedFormat.value, selectedLayout.value)
+  saveSettings(gamemode.value, selectedFormat.value, selectedLayout.value, maimaiChartTypeMode.value)
 }
 
 const loadCookie = () => {
@@ -64,6 +66,7 @@ const loadCookie = () => {
       selectedFormat.value = settings.format
     }
     selectedLayout.value = settings.layout
+    maimaiChartTypeMode.value = settings.maimaiChartTypeMode
     updateLabels()
   }
 }
@@ -85,7 +88,8 @@ const processCorrectionHandler = async () => {
       ? await processClientCorrection(
           inputText.value,
           gamemode.value,
-          selectedFormat.value
+          selectedFormat.value,
+          maimaiChartTypeMode.value
         )
       : await processCorrection(
           inputText.value,
@@ -111,7 +115,7 @@ const processCorrectionHandler = async () => {
 
 
 // フォーマットとレイアウトの変更を監視してCookieに保存
-watch([selectedFormat, selectedLayout], () => {
+watch([selectedFormat, selectedLayout, maimaiChartTypeMode], () => {
   saveCookie()
 })
 
@@ -138,6 +142,8 @@ onMounted(async () => {
     :class="{
       'bg-gradient-to-r from-amber-50 to-yellow-100': gamemode === 0,
       'bg-gradient-to-r from-cyan-50 to-pink-100': gamemode === 1,
+      'bg-gradient-to-r from-pink-50 to-pink-100': gamemode === 2,
+      'bg-gradient-to-r from-lime-50 to-green-100': gamemode === 3,
     }"
   >
     <!-- Header -->
@@ -150,6 +156,7 @@ onMounted(async () => {
       :formatOptions="formatOptions"
       :selectedFormat="selectedFormat"
       :selectedLayout="selectedLayout"
+      :maimaiChartTypeMode="maimaiChartTypeMode"
       :inputText="inputText"
       :outputText="outputText"
       :outputTypes="outputTypes"
@@ -158,6 +165,7 @@ onMounted(async () => {
       @update:gamemode="switchGamemode"
       @update:selectedFormat="selectedFormat = $event"
       @update:selectedLayout="selectedLayout = $event"
+      @update:maimaiChartTypeMode="maimaiChartTypeMode = $event as ChartTypeMode"
       @update:inputText="inputText = $event"
       @processCorrection="processCorrectionHandler"
     />
@@ -167,6 +175,3 @@ onMounted(async () => {
   </div>
 </template>
 
-<style scoped>
-/* Empty - all styles have been moved to components */
-</style>

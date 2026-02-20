@@ -1,6 +1,8 @@
 // ゲームモード定数
 export const GAMEMODE_CHUNITHM = 0
 export const GAMEMODE_SDVX = 1
+export const GAMEMODE_MAIMAI = 2
+export const GAMEMODE_ONGEKI = 3
 
 // フォーマットオプション
 export interface FormatOption {
